@@ -33,7 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Perspikapps\\LaravelEnvRibbon\\Tests\\": "tests"
+            "Perspikapps\\LaravelEnvRibbon\\Tests\\": "tests/"
         }
     },
     "extra": {
