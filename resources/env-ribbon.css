@@ -16,6 +16,7 @@
     margin: 1px 0;
     padding: 10px 50px;
     color: white;
+    opacity: 0.2;
 }
 
 .env-ribbon.shadow {
