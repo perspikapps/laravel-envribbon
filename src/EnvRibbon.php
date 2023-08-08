@@ -3,7 +3,6 @@
 namespace Perspikapps\LaravelEnvRibbon;
 
 use AvtoDev\AppVersion\AppVersionManager;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -43,8 +42,6 @@ class EnvRibbon
         }
 
         $this->app = $app;
-        $this->version = $app->version();
-        $this->is_lumen = Str::contains($this->version, 'Lumen');
         $this->appversion = $appversion;
 
         $this->loadConfig();

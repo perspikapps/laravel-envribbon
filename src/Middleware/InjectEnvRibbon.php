@@ -17,7 +17,7 @@ class InjectEnvRibbon
     protected $container;
 
     /**
-     * The DebugBar instance.
+     * The EnvRibbon instance.
      *
      * @var LaravelDebugbar
      */
@@ -41,7 +41,7 @@ class InjectEnvRibbon
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (! $this->envribbon->isEnabled()) {
+        if (!$this->envribbon->isEnabled()) {
             return $next($request);
         }
 
