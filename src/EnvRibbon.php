@@ -122,6 +122,10 @@ class EnvRibbon
         $config = $this->app['config'];
         $environments = value($config->get('env-ribbon.environments'));
 
+        if (! is_array($environments)) {
+            return;
+        }
+
         $index = array_key_exists($current, $environments) ? $current : '*';
 
         if (array_key_exists($index, $environments)) {
