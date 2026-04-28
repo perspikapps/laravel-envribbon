@@ -10,7 +10,7 @@
 
 [![Buy me a coffee](https://badgen.net/badge/buymeacoffe/tomgrv/yellow?icon=buymeacoffee)](https://buymeacoffee.com/tomgrv)
 
-This package displays automaticaly a top-left corner ribbon with APP_ENV value & version number on all pages, depending on APP_ENV value & associated config:
+This package displays automatically a top-left corner ribbon with APP_ENV value & version number on all pages, depending on APP_ENV value & associated config:
 
 ![capture](./doc/assets/capture.png)
 
