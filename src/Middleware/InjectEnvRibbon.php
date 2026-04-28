@@ -19,7 +19,7 @@ class InjectEnvRibbon
     /**
      * The EnvRibbon instance.
      *
-     * @var LaravelDebugbar
+     * @var EnvRibbon
      */
     protected $envribbon;
 
@@ -35,13 +35,12 @@ class InjectEnvRibbon
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (!$this->envribbon->isEnabled()) {
+        if (! $this->envribbon->isEnabled()) {
             return $next($request);
         }
 
