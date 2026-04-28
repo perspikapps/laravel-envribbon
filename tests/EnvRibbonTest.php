@@ -38,11 +38,6 @@ class EnvRibbonTest extends TestCase
         ]);
     }
 
-    public function test_example()
-    {
-        $this->assertEquals(1, 1);
-    }
-
     public function test_service_provider_registers_envribbon()
     {
         $envribbon = $this->app->make(EnvRibbon::class);
