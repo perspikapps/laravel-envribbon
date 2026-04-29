@@ -1,113 +1,69 @@
 <?php
 
-namespace Perspikapps\LaravelEnvRibbon\Tests;
-
-use Orchestra\Testbench\TestCase;
 use Perspikapps\LaravelEnvRibbon\EnvRibbon;
-use Perspikapps\LaravelEnvRibbon\EnvRibbonServiceProvider;
 use Perspikapps\LaravelEnvRibbon\Facades\EnvRibbon as EnvRibbonFacade;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnvRibbonTest extends TestCase
-{
-    protected function getPackageProviders($app)
-    {
-        return [EnvRibbonServiceProvider::class];
-    }
+test('service provider registers envribbon', function () {
+    expect($this->app->make(EnvRibbon::class))->toBeInstanceOf(EnvRibbon::class);
+});
 
-    protected function getPackageAliases($app)
-    {
-        return [
-            'EnvRibbon' => EnvRibbonFacade::class,
-        ];
-    }
+test('facade resolves correctly', function () {
+    expect(EnvRibbonFacade::getFacadeRoot())->toBeInstanceOf(EnvRibbon::class);
+});
 
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('env-ribbon.enabled', true);
-        $app['config']->set('env-ribbon.environments', [
-            'testing' => [
-                'visible' => true,
-                'color' => 'crimson',
-            ],
-            '*' => [
-                'visible' => true,
-                'color' => 'black',
-            ],
-        ]);
-    }
+test('isEnabled returns true when enabled', function () {
+    $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
+    $envribbon->enable();
 
-    public function test_service_provider_registers_envribbon()
-    {
-        $envribbon = $this->app->make(EnvRibbon::class);
-        $this->assertInstanceOf(EnvRibbon::class, $envribbon);
-    }
+    expect($envribbon->isEnabled())->toBeTrue();
+});
 
-    public function test_facade_resolves_correctly()
-    {
-        $this->assertInstanceOf(EnvRibbon::class, EnvRibbonFacade::getFacadeRoot());
-    }
+test('isEnabled returns false when disabled in config', function () {
+    $this->app['config']->set('env-ribbon.enabled', false);
+    $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
 
-    public function test_is_enabled_returns_true_when_configured()
-    {
-        $this->app['config']->set('env-ribbon.enabled', true);
-        $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
-        $envribbon->enable();
-        $this->assertTrue($envribbon->isEnabled());
-    }
+    expect($envribbon->isEnabled())->toBeFalse();
+});
 
-    public function test_is_enabled_returns_false_when_disabled_in_config()
-    {
-        $this->app['config']->set('env-ribbon.enabled', false);
-        // Make a fresh instance after changing config
-        $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
-        $this->assertFalse($envribbon->isEnabled());
-    }
+test('enable forces enabled state regardless of config', function () {
+    $this->app['config']->set('env-ribbon.enabled', false);
+    $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
+    $envribbon->enable();
 
-    public function test_enable_forces_enabled_state()
-    {
-        $this->app['config']->set('env-ribbon.enabled', false);
-        $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
-        $envribbon->enable();
-        $this->assertTrue($envribbon->isEnabled());
-    }
+    expect($envribbon->isEnabled())->toBeTrue();
+});
 
-    public function test_load_config_handles_null_environments_gracefully()
-    {
-        $this->app['config']->set('env-ribbon.environments', null);
-        // Should not throw
-        $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
-        $this->assertNotNull($envribbon);
-    }
+test('loadConfig handles null environments gracefully', function () {
+    $this->app['config']->set('env-ribbon.environments', null);
+    $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
 
-    public function test_modify_response_injects_ribbon_into_html()
-    {
-        $envribbon = $this->app->make(EnvRibbon::class);
-        $envribbon->enable();
+    expect($envribbon)->toBeInstanceOf(EnvRibbon::class);
+});
 
-        $html = '<html><head></head><body><p>Hello</p></body></html>';
-        $request = Request::create('/');
-        $response = new Response($html);
+test('modifyResponse injects ribbon into html', function () {
+    $envribbon = $this->app->make(EnvRibbon::class);
+    $envribbon->enable();
 
-        $envribbon->modifyResponse($request, $response);
+    $html = '<html><head></head><body><p>Hello</p></body></html>';
+    $response = new Response($html);
 
-        $content = $response->getContent();
-        $this->assertStringContainsString('<style>', $content);
-        $this->assertStringContainsString('env-ribbon', $content);
-    }
+    $envribbon->modifyResponse(Request::create('/'), $response);
 
-    public function test_modify_response_does_not_inject_when_disabled()
-    {
-        $this->app['config']->set('env-ribbon.enabled', false);
-        $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
+    expect($response->getContent())
+        ->toContain('<style>')
+        ->toContain('env-ribbon');
+});
 
-        $html = '<html><head></head><body><p>Hello</p></body></html>';
-        $request = Request::create('/');
-        $response = new Response($html);
+test('modifyResponse does not inject when disabled', function () {
+    $this->app['config']->set('env-ribbon.enabled', false);
+    $envribbon = new EnvRibbon($this->app, $this->app->make('AvtoDev\AppVersion\AppVersionManagerInterface'));
 
-        $envribbon->modifyResponse($request, $response);
+    $html = '<html><head></head><body><p>Hello</p></body></html>';
+    $response = new Response($html);
 
-        $this->assertEquals($html, $response->getContent());
-    }
-}
+    $envribbon->modifyResponse(Request::create('/'), $response);
+
+    expect($response->getContent())->toBe($html);
+});
