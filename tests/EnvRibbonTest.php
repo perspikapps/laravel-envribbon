@@ -5,7 +5,7 @@ use Perspikapps\LaravelEnvRibbon\Facades\EnvRibbon as EnvRibbonFacade;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-test('service provider registers envribbon', function () {
+test('service provider registers EnvRibbon', function () {
     expect($this->app->make(EnvRibbon::class))->toBeInstanceOf(EnvRibbon::class);
 });
 
