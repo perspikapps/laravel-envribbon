@@ -1,4 +1,4 @@
 /vendor/
 /.history/
 /node_modules/
-.phpunit.cache
+.phpunit.cache/*
