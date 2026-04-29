@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec488232664bf8c51f855ccb0230ccb4",
+    "content-hash": "70a18173ff7bee4ce38a287b801eee7b",
     "packages": [
         {
             "name": "avto-dev/app-version-laravel",
@@ -12164,7 +12164,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=8.0"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"
