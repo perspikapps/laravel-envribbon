@@ -12,7 +12,12 @@
     text-decoration: none;
     text-transform: uppercase;
     border: 1px solid lighten(var(--ribbon-color, #e3342f), 50%);
-    font: bold 100% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font:
+        bold 100% 'Helvetica Neue',
+        Helvetica,
+        Arial,
+        sans-serif;
+    font-size: 0.8em;
     margin: 1px 0;
     padding: 10px 50px;
     color: white;

@@ -1,4 +1,5 @@
 /vendor/
 /.history/
 /node_modules/
+.phpunit.cache/*
 ./.gitattributes

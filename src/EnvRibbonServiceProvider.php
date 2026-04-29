@@ -12,8 +12,6 @@ class EnvRibbonServiceProvider extends ServiceProvider
 
     /**
      * Perform post-registration booting of services.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -32,8 +30,6 @@ class EnvRibbonServiceProvider extends ServiceProvider
 
     /**
      * Register any package services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -55,7 +51,7 @@ class EnvRibbonServiceProvider extends ServiceProvider
     /**
      * Register the Middleware.
      *
-     * @param string $middleware
+     * @param  string  $middleware
      */
     protected function registerMiddleware($middleware)
     {
@@ -75,8 +71,6 @@ class EnvRibbonServiceProvider extends ServiceProvider
 
     /**
      * Console-specific booting.
-     *
-     * @return void
      */
     protected function bootForConsole(): void
     {

@@ -3,6 +3,7 @@
 namespace Perspikapps\LaravelEnvRibbon;
 
 use AvtoDev\AppVersion\AppVersionManager;
+use Illuminate\Foundation\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +14,7 @@ class EnvRibbon
     /**
      * The Laravel application instance.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var Application
      */
     protected $app;
 
@@ -33,12 +34,12 @@ class EnvRibbon
     protected $visible = null;
 
     /**
-     * @param Application $app
+     * @param  ?Application  $app
      */
-    public function __construct($app = null, AppVersionManager $appversion)
+    public function __construct(?Application $app = null, AppVersionManager $appversion = null)
     {
         if (! $app) {
-            $app = app();   //Fallback when $app is not given
+            $app = app();   // Fallback when $app is not given
         }
 
         $this->app = $app;
@@ -58,7 +59,7 @@ class EnvRibbon
     /**
      * Modify the response and inject the ribbon (or data in headers).
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function modifyResponse(Request $request, Response $response)
     {
@@ -99,7 +100,7 @@ class EnvRibbon
      */
     public function isEnabled()
     {
-        if (null === $this->enabled) {
+        if ($this->enabled === null) {
             $config = $this->app['config'];
             $configEnabled = value($config->get('env-ribbon.enabled'));
 
@@ -121,9 +122,13 @@ class EnvRibbon
         $config = $this->app['config'];
         $environments = value($config->get('env-ribbon.environments'));
 
-        $index = key_exists($current, $environments) ? $current : '*';
+        if (! is_array($environments)) {
+            return;
+        }
 
-        if (key_exists($index, $environments)) {
+        $index = array_key_exists($current, $environments) ? $current : '*';
+
+        if (array_key_exists($index, $environments)) {
             $this->color = $environments[$index]['color'] ?? 'black';
             $this->visible = $environments[$index]['visible'] ?? true;
         }

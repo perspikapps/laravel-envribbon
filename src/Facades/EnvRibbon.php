@@ -3,6 +3,7 @@
 namespace Perspikapps\LaravelEnvRibbon\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Perspikapps\LaravelEnvRibbon\EnvRibbon as EnvRibbonService;
 
 class EnvRibbon extends Facade
 {
@@ -13,6 +14,6 @@ class EnvRibbon extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'envribbon';
+        return EnvRibbonService::class;
     }
 }
